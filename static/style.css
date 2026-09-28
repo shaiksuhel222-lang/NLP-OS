@@ -1,0 +1,195 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #0b1020;
+    color: #eef2ff;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.container,
+main {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+h1 {
+    margin: 5px 0;
+    font-size: 44px;
+    line-height: 1.1;
+}
+
+small {
+    color: #8fa7ff;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+header p {
+    margin-top: 10px;
+    color: #aab3ca;
+}
+
+/* Main Cards */
+.hero,
+.box {
+    background: #11182c;
+    border: 1px solid #293454;
+    border-radius: 18px;
+    padding: 24px;
+    margin-top: 18px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+.hero h2 {
+    margin-top: 0;
+    font-size: 28px;
+}
+
+.hero p,
+.box p {
+    color: #aab3ca;
+    line-height: 1.6;
+}
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+/* Command Input */
+input {
+    width: 55%;
+    padding: 13px 15px;
+    border-radius: 9px;
+    border: 1px solid #39456a;
+    outline: none;
+    background: #0a1020;
+    color: #ffffff;
+    font-size: 15px;
+}
+
+input::placeholder {
+    color: #7d89a8;
+}
+
+input:focus {
+    border-color: #6f85ff;
+    box-shadow: 0 0 0 3px rgba(83, 109, 254, 0.15);
+}
+
+/* Buttons */
+button {
+    padding: 12px 15px;
+    margin: 4px;
+    border: 0;
+    border-radius: 9px;
+    background: #536dfe;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Example Commands */
+.examples {
+    margin-top: 12px;
+}
+
+.examples span {
+    display: inline-block;
+    background: #121a31;
+    border: 1px solid #293454;
+    padding: 9px 12px;
+    margin: 4px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #cbd4f5;
+}
+
+/* Camera */
+video {
+    width: 100%;
+    max-width: 700px;
+    display: block;
+    margin: 15px auto;
+    border-radius: 14px;
+    border: 1px solid #39456a;
+    background: #050812;
+}
+
+/* Status */
+#cameraStatus {
+    color: #aab3ca;
+    font-size: 14px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    color: #66718e;
+    margin-top: 30px;
+    padding-bottom: 20px;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+
+    .container,
+    main {
+        width: 94%;
+        padding: 20px 0;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    h1 {
+        font-size: 34px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    input {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    button {
+        margin: 4px 2px;
+    }
+
+    .hero,
+    .box {
+        padding: 18px;
+    }
+}

@@ -49,7 +49,55 @@ async function send() {
             result.textContent =
                 d.result || "Done";
 
+
+        /* =========================
+           BROWSER ACTIONS
+           ========================= */
+
+        const command = text.toLowerCase();
+
+        if (
+            command.includes("open youtube") ||
+            command === "youtube"
+        ) {
+            window.open(
+                "https://www.youtube.com",
+                "_blank"
+            );
+        }
+
+        if (
+            command.includes("open google") ||
+            command === "google"
+        ) {
+            window.open(
+                "https://www.google.com",
+                "_blank"
+            );
+        }
+
+        if (
+            command.includes("open github") ||
+            command === "github"
+        ) {
+            window.open(
+                "https://github.com",
+                "_blank"
+            );
+        }
+
+        if (
+            command.includes("open whatsapp") ||
+            command === "whatsapp"
+        ) {
+            window.open(
+                "https://web.whatsapp.com",
+                "_blank"
+            );
+        }
+
     } catch (e) {
+
         console.error(e);
 
         document.getElementById("result").textContent =
@@ -58,7 +106,9 @@ async function send() {
 }
 
 
-/* QUICK COMMANDS */
+/* =========================
+   QUICK COMMANDS
+   ========================= */
 
 function quick(text) {
     input.value = text;
@@ -66,7 +116,9 @@ function quick(text) {
 }
 
 
-/* VOICE RECOGNITION */
+/* =========================
+   VOICE RECOGNITION
+   ========================= */
 
 const SR =
     window.SpeechRecognition ||
@@ -82,28 +134,37 @@ if (SR) {
 
     rec.onstart = () => {
 
-        const voice = document.getElementById("voice");
+        const voice =
+            document.getElementById("voice");
 
         if (voice)
-            voice.textContent = "🎤 LISTENING...";
+            voice.textContent =
+                "🎤 LISTENING...";
     };
 
     rec.onend = () => {
 
-        const voice = document.getElementById("voice");
+        const voice =
+            document.getElementById("voice");
 
         if (voice)
-            voice.textContent = "🎤 VOICE READY";
+            voice.textContent =
+                "🎤 VOICE READY";
     };
 
     rec.onerror = (event) => {
 
-        console.log("Voice error:", event.error);
+        console.log(
+            "Voice error:",
+            event.error
+        );
 
-        const voice = document.getElementById("voice");
+        const voice =
+            document.getElementById("voice");
 
         if (voice)
-            voice.textContent = "🎤 VOICE ERROR";
+            voice.textContent =
+                "🎤 VOICE ERROR";
     };
 
     rec.onresult = (event) => {
@@ -143,7 +204,9 @@ if (SR) {
 }
 
 
-/* GESTURE STATUS */
+/* =========================
+   GESTURE STATUS
+   ========================= */
 
 async function updateGestureStatus() {
 
@@ -152,7 +215,8 @@ async function updateGestureStatus() {
         const response =
             await fetch("/api/gesture-status");
 
-        const d = await response.json();
+        const d =
+            await response.json();
 
         const gesture =
             document.getElementById("gesture");
@@ -191,8 +255,13 @@ async function updateGestureStatus() {
 }
 
 
-/* CHECK GESTURE STATUS EVERY 700ms */
+/* =========================
+   CHECK STATUS EVERY 700ms
+   ========================= */
 
-setInterval(updateGestureStatus, 700);
+setInterval(
+    updateGestureStatus,
+    700
+);
 
 updateGestureStatus();

@@ -1,4 +1,3 @@
-```python
 import os
 import platform
 import subprocess
@@ -6,8 +5,6 @@ import webbrowser
 from datetime import datetime
 from urllib.parse import quote_plus
 
-# PyAutoGUI works on Windows desktop.
-# Render/Linux is headless, so don't import it there.
 if os.name == "nt":
     import pyautogui
 else:
@@ -31,21 +28,30 @@ def execute_action(a):
             candidates = [
                 os.path.join(
                     os.environ.get("PROGRAMFILES", ""),
-                    "Google", "Chrome", "Application", "chrome.exe"
+                    "Google",
+                    "Chrome",
+                    "Application",
+                    "chrome.exe",
                 ),
                 os.path.join(
                     os.environ.get("PROGRAMFILES(X86)", ""),
-                    "Google", "Chrome", "Application", "chrome.exe"
+                    "Google",
+                    "Chrome",
+                    "Application",
+                    "chrome.exe",
                 ),
                 os.path.join(
                     os.environ.get("LOCALAPPDATA", ""),
-                    "Google", "Chrome", "Application", "chrome.exe"
+                    "Google",
+                    "Chrome",
+                    "Application",
+                    "chrome.exe",
                 ),
             ]
 
             chrome = next(
-                (p for p in candidates if p and os.path.exists(p)),
-                None
+                (path for path in candidates if path and os.path.exists(path)),
+                None,
             )
 
             if chrome:
@@ -60,15 +66,14 @@ def execute_action(a):
         return "Google opened"
 
     if i == "search_web":
-        q = e.get("query", "").strip()
+        query = str(e.get("query", "")).strip()
 
-        if not q:
+        if not query:
             return "Search query is empty"
 
-        webbrowser.open(
-            "https://www.google.com/search?q=" + quote_plus(q)
-        )
-        return "Searching: " + q
+        url = "https://www.google.com/search?q=" + quote_plus(query)
+        webbrowser.open(url)
+        return "Searching: " + query
 
     if i == "open_calculator":
         if os.name == "nt":
@@ -95,13 +100,17 @@ def execute_action(a):
         if pyautogui is None:
             return "Screenshot is available only on Windows desktop"
 
-        path = os.path.join(
+        pictures_folder = os.path.join(
             os.path.expanduser("~"),
             "Pictures",
-            "NLP_OS_Screenshot.png"
         )
 
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        os.makedirs(pictures_folder, exist_ok=True)
+
+        path = os.path.join(
+            pictures_folder,
+            "NLP_OS_Screenshot.png",
+        )
 
         image = pyautogui.screenshot()
         image.save(path)
@@ -177,4 +186,3 @@ def execute_action(a):
         return datetime.now().strftime("%I:%M:%S %p")
 
     return "Command not recognized"
-```

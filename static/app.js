@@ -1,3 +1,4 @@
+```javascript
 const input = document.getElementById("cmd");
 
 /* =====================================================
@@ -11,7 +12,6 @@ async function send() {
     if (!text) return;
 
     const command = text.toLowerCase();
-
     const result = document.getElementById("result");
 
     if (result) {
@@ -75,17 +75,10 @@ async function send() {
             return;
         }
 
-        const intent =
-            document.getElementById("intent");
-
-        const conf =
-            document.getElementById("conf");
-
-        const entities =
-            document.getElementById("entities");
-
-        const action =
-            document.getElementById("action");
+        const intent = document.getElementById("intent");
+        const conf = document.getElementById("conf");
+        const entities = document.getElementById("entities");
+        const action = document.getElementById("action");
 
         if (intent) {
             intent.textContent =
@@ -124,7 +117,6 @@ async function send() {
                 command.includes("youtube") ||
                 command === "youtube"
             ) {
-
                 browserTab.location.href =
                     "https://www.youtube.com";
             }
@@ -133,7 +125,6 @@ async function send() {
                 command.includes("google") ||
                 command === "google"
             ) {
-
                 browserTab.location.href =
                     "https://www.google.com";
             }
@@ -142,7 +133,6 @@ async function send() {
                 command.includes("github") ||
                 command === "github"
             ) {
-
                 browserTab.location.href =
                     "https://github.com";
             }
@@ -151,7 +141,6 @@ async function send() {
                 command.includes("whatsapp") ||
                 command === "whatsapp"
             ) {
-
                 browserTab.location.href =
                     "https://web.whatsapp.com";
             }
@@ -195,13 +184,10 @@ let recognition = null;
 
 if (SpeechRecognition) {
 
-    recognition =
-        new SpeechRecognition();
+    recognition = new SpeechRecognition();
 
     recognition.lang = "en-IN";
-
     recognition.continuous = false;
-
     recognition.interimResults = false;
 
     recognition.onstart = function () {
@@ -215,75 +201,66 @@ if (SpeechRecognition) {
         }
     };
 
-    recognition.onresult =
-        function (event) {
+    recognition.onresult = function (event) {
 
-            const spokenText =
-                event.results[0][0]
-                    .transcript;
+        const spokenText =
+            event.results[0][0].transcript;
 
-            console.log(
-                "Voice:",
-                spokenText
-            );
+        console.log(
+            "Voice:",
+            spokenText
+        );
 
-            input.value =
-                spokenText;
+        input.value = spokenText;
 
-            send();
-        };
+        send();
+    };
 
-    recognition.onerror =
-        function (event) {
+    recognition.onerror = function (event) {
 
-            console.error(
-                "Voice error:",
-                event.error
-            );
+        console.error(
+            "Voice error:",
+            event.error
+        );
 
-            const voice =
-                document.getElementById("voice");
+        const voice =
+            document.getElementById("voice");
 
-            if (voice) {
-                voice.textContent =
-                    "🎤 VOICE ERROR: " +
-                    event.error;
-            }
-        };
+        if (voice) {
+            voice.textContent =
+                "🎤 VOICE ERROR: " +
+                event.error;
+        }
+    };
 
-    recognition.onend =
-        function () {
+    recognition.onend = function () {
 
-            const voice =
-                document.getElementById("voice");
+        const voice =
+            document.getElementById("voice");
 
-            if (voice) {
-                voice.textContent =
-                    "🎤 VOICE READY";
-            }
-        };
+        if (voice) {
+            voice.textContent =
+                "🎤 VOICE READY";
+        }
+    };
 
     const voiceButton =
         document.getElementById("voiceBtn");
 
     if (voiceButton) {
 
-        voiceButton.onclick =
-            function () {
+        voiceButton.onclick = function () {
 
-                try {
+            try {
+                recognition.start();
+            }
 
-                    recognition.start();
-
-                }
-
-                catch (error) {
-
-                    console.log(
-                        "Recognition already running"
-                    );
-                }
-            };
+            catch (error) {
+                console.log(
+                    "Recognition already running"
+                );
+            }
+        };
     }
 
 }
@@ -313,19 +290,15 @@ else {
    ===================================================== */
 
 let cameraStream = null;
-
 let cameraRunning = false;
 
 let handLandmarker = null;
-
 let handModelLoading = false;
 
 let animationId = null;
-
 let lastVideoTime = -1;
 
 let lastGesture = "";
-
 let lastGestureTime = 0;
 
 
@@ -346,33 +319,43 @@ async function loadHandLandmarker() {
     handModelLoading = true;
 
     const status =
-        document.getElementById(
-            "cameraStatus"
-        );
+        document.getElementById("cameraStatus");
 
     try {
 
         if (status) {
             status.textContent =
-                "⏳ Loading hand AI model...";
+                "⏳ Loading Hand AI...";
         }
 
         /*
-         * Load MediaPipe Tasks Vision
-         *
          * IMPORTANT:
-         * 0.10.21 is used because 0.10.22
-         * does not exist on the CDN.
+         * Use ES module import instead of the old
+         * global vision_bundle.js method.
          */
 
-        if (!window.FilesetResolver) {
+        const vision =
+            await import(
+                "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/+esm"
+            );
 
-            await loadScript(
-                "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/vision_bundle.js"
+        const FilesetResolver =
+            vision.FilesetResolver;
+
+        const HandLandmarker =
+            vision.HandLandmarker;
+
+        if (!FilesetResolver || !HandLandmarker) {
+            throw new Error(
+                "MediaPipe Hand Landmarker API unavailable"
             );
         }
 
-        const vision =
+        /*
+         * Load MediaPipe WASM files
+         */
+
+        const fileset =
             await FilesetResolver.forVisionTasks(
                 "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/wasm"
             );
@@ -383,7 +366,7 @@ async function loadHandLandmarker() {
 
         handLandmarker =
             await HandLandmarker.createFromOptions(
-                vision,
+                fileset,
                 {
                     baseOptions: {
 
@@ -397,11 +380,14 @@ async function loadHandLandmarker() {
 
                     numHands: 1,
 
-                    minHandDetectionConfidence: 0.5,
+                    minHandDetectionConfidence:
+                        0.5,
 
-                    minHandPresenceConfidence: 0.5,
+                    minHandPresenceConfidence:
+                        0.5,
 
-                    minTrackingConfidence: 0.5
+                    minTrackingConfidence:
+                        0.5
                 }
             );
 
@@ -430,52 +416,12 @@ async function loadHandLandmarker() {
         );
 
         if (status) {
-
             status.textContent =
                 "🔴 Hand AI failed to load";
         }
 
         return false;
     }
-}
-
-
-/* =====================================================
-   LOAD EXTERNAL SCRIPT
-   ===================================================== */
-
-function loadScript(src) {
-
-    return new Promise(
-        function (resolve, reject) {
-
-            const script =
-                document.createElement(
-                    "script"
-                );
-
-            script.src = src;
-
-            script.onload =
-                function () {
-                    resolve();
-                };
-
-            script.onerror =
-                function () {
-
-                    reject(
-                        new Error(
-                            "Could not load: " + src
-                        )
-                    );
-                };
-
-            document.head.appendChild(
-                script
-            );
-        }
-    );
 }
 
 
@@ -489,9 +435,7 @@ async function startCamera() {
         document.getElementById("camera");
 
     const status =
-        document.getElementById(
-            "cameraStatus"
-        );
+        document.getElementById("cameraStatus");
 
     const indicator =
         document.getElementById("cam");
@@ -553,7 +497,6 @@ async function startCamera() {
             cameraStream;
 
         video.muted = true;
-
         video.playsInline = true;
 
         await video.play();
@@ -570,20 +513,12 @@ async function startCamera() {
                 "⏳ Camera ON • Loading Hand AI...";
         }
 
-        /*
-         * Load hand model
-         */
-
         const ready =
             await loadHandLandmarker();
 
         if (!ready) {
             return;
         }
-
-        /*
-         * Start detection
-         */
 
         lastVideoTime = -1;
 
@@ -599,7 +534,6 @@ async function startCamera() {
         );
 
         cameraStream = null;
-
         cameraRunning = false;
 
         if (
@@ -650,9 +584,7 @@ function stopCamera() {
         document.getElementById("camera");
 
     const status =
-        document.getElementById(
-            "cameraStatus"
-        );
+        document.getElementById("cameraStatus");
 
     const indicator =
         document.getElementById("cam");
@@ -680,7 +612,6 @@ function stopCamera() {
     }
 
     cameraRunning = false;
-
     lastVideoTime = -1;
 
     if (video) {
@@ -698,14 +629,10 @@ function stopCamera() {
     }
 
     const gesture =
-        document.getElementById(
-            "gesture"
-        );
+        document.getElementById("gesture");
 
     const action =
-        document.getElementById(
-            "gaction"
-        );
+        document.getElementById("gaction");
 
     if (gesture) {
         gesture.textContent =
@@ -730,9 +657,7 @@ function detectHands() {
     }
 
     const video =
-        document.getElementById(
-            "camera"
-        );
+        document.getElementById("camera");
 
     if (
         !video ||
@@ -795,14 +720,10 @@ function detectHands() {
    PROCESS HAND RESULTS
    ===================================================== */
 
-function processHandResults(
-    results
-) {
+function processHandResults(results) {
 
     const gestureElement =
-        document.getElementById(
-            "gesture"
-        );
+        document.getElementById("gesture");
 
     if (
         !results ||
@@ -811,7 +732,6 @@ function processHandResults(
     ) {
 
         if (gestureElement) {
-
             gestureElement.textContent =
                 "No hand detected";
         }
@@ -823,34 +743,25 @@ function processHandResults(
         results.landmarks[0];
 
     const gesture =
-        detectGesture(
-            landmarks
-        );
+        detectGesture(landmarks);
 
     if (gestureElement) {
-
         gestureElement.textContent =
             gesture;
     }
 
-    performGesture(
-        gesture
-    );
+    performGesture(gesture);
 }
 
 
 /* =====================================================
-   DISTANCE BETWEEN TWO LANDMARKS
+   DISTANCE
    ===================================================== */
 
 function distance(a, b) {
 
-    const dx =
-        a.x - b.x;
-
-    const dy =
-        a.y - b.y;
-
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
     const dz =
         (a.z || 0) -
         (b.z || 0);
@@ -864,7 +775,7 @@ function distance(a, b) {
 
 
 /* =====================================================
-   FINGER UP DETECTION
+   FINGER UP
    ===================================================== */
 
 function isFingerUp(
@@ -884,9 +795,7 @@ function isFingerUp(
    GESTURE DETECTION
    ===================================================== */
 
-function detectGesture(
-    landmarks
-) {
+function detectGesture(landmarks) {
 
     const index =
         isFingerUp(
@@ -917,9 +826,7 @@ function detectGesture(
         );
 
 
-    /*
-     * Open Palm
-     */
+    /* Open Palm */
 
     if (
         index &&
@@ -927,14 +834,11 @@ function detectGesture(
         ring &&
         pinky
     ) {
-
         return "OPEN PALM";
     }
 
 
-    /*
-     * Three Fingers
-     */
+    /* Three Fingers */
 
     if (
         index &&
@@ -942,14 +846,11 @@ function detectGesture(
         ring &&
         !pinky
     ) {
-
         return "THREE FINGERS";
     }
 
 
-    /*
-     * Two Fingers
-     */
+    /* Two Fingers */
 
     if (
         index &&
@@ -957,14 +858,11 @@ function detectGesture(
         !ring &&
         !pinky
     ) {
-
         return "TWO FINGERS";
     }
 
 
-    /*
-     * Index Finger
-     */
+    /* Index Finger */
 
     if (
         index &&
@@ -972,14 +870,11 @@ function detectGesture(
         !ring &&
         !pinky
     ) {
-
         return "INDEX FINGER";
     }
 
 
-    /*
-     * Fist
-     */
+    /* Fist */
 
     if (
         !index &&
@@ -987,7 +882,6 @@ function detectGesture(
         !ring &&
         !pinky
     ) {
-
         return "FIST";
     }
 
@@ -1000,19 +894,15 @@ function detectGesture(
    GESTURE ACTION
    ===================================================== */
 
-function performGesture(
-    gesture
-) {
+function performGesture(gesture) {
 
     const now =
         Date.now();
 
     if (
         gesture === lastGesture &&
-        now - lastGestureTime <
-        1000
+        now - lastGestureTime < 1000
     ) {
-
         return;
     }
 
@@ -1023,64 +913,42 @@ function performGesture(
         now;
 
     const action =
-        document.getElementById(
-            "gaction"
-        );
+        document.getElementById("gaction");
 
-
-    /*
-     * TWO FINGERS
-     * Scroll UP
-     */
 
     if (
         gesture ===
         "TWO FINGERS"
     ) {
 
-        window.scrollBy(
-            {
-                top: -350,
-                behavior: "smooth"
-            }
-        );
+        window.scrollBy({
+            top: -350,
+            behavior: "smooth"
+        });
 
         if (action) {
-
             action.textContent =
                 "⬆️ Scroll Up";
         }
     }
 
 
-    /*
-     * INDEX
-     * Scroll DOWN
-     */
-
     else if (
         gesture ===
         "INDEX FINGER"
     ) {
 
-        window.scrollBy(
-            {
-                top: 350,
-                behavior: "smooth"
-            }
-        );
+        window.scrollBy({
+            top: 350,
+            behavior: "smooth"
+        });
 
         if (action) {
-
             action.textContent =
                 "⬇️ Scroll Down";
         }
     }
 
-
-    /*
-     * OPEN PALM
-     */
 
     else if (
         gesture ===
@@ -1088,7 +956,6 @@ function performGesture(
     ) {
 
         if (action) {
-
             action.textContent =
                 "🔊 Volume Up";
         }
@@ -1099,17 +966,12 @@ function performGesture(
     }
 
 
-    /*
-     * THREE FINGERS
-     */
-
     else if (
         gesture ===
         "THREE FINGERS"
     ) {
 
         if (action) {
-
             action.textContent =
                 "🔉 Volume Down";
         }
@@ -1120,17 +982,12 @@ function performGesture(
     }
 
 
-    /*
-     * FIST
-     */
-
     else if (
         gesture ===
         "FIST"
     ) {
 
         if (action) {
-
             action.textContent =
                 "🔇 Mute";
         }
@@ -1155,28 +1012,23 @@ window.addEventListener(
         );
 
         const voice =
-            document.getElementById(
-                "voice"
-            );
+            document.getElementById("voice");
 
         if (
             voice &&
             SpeechRecognition
         ) {
-
             voice.textContent =
                 "🎤 VOICE READY";
         }
 
         const gesture =
-            document.getElementById(
-                "gesture"
-            );
+            document.getElementById("gesture");
 
         if (gesture) {
-
             gesture.textContent =
                 "Waiting...";
         }
     }
 );
+```

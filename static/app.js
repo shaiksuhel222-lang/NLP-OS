@@ -54,11 +54,9 @@ async function send() {
             "/api/command",
             {
                 method: "POST",
-
                 headers: {
                     "Content-Type": "application/json"
                 },
-
                 body: JSON.stringify({
                     text: text
                 })
@@ -361,18 +359,22 @@ async function loadHandLandmarker() {
 
         /*
          * Load MediaPipe Tasks Vision
+         *
+         * IMPORTANT:
+         * 0.10.21 is used because 0.10.22
+         * does not exist on the CDN.
          */
 
         if (!window.FilesetResolver) {
 
             await loadScript(
-                "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/vision_bundle.js"
+                "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/vision_bundle.js"
             );
         }
 
         const vision =
             await FilesetResolver.forVisionTasks(
-                "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm"
+                "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/wasm"
             );
 
         /*
@@ -750,10 +752,6 @@ function detectHands() {
         HTMLMediaElement.HAVE_CURRENT_DATA
     ) {
 
-        /*
-         * Only process a new video frame
-         */
-
         if (
             video.currentTime !==
             lastVideoTime
@@ -821,10 +819,6 @@ function processHandResults(
         return;
     }
 
-    /*
-     * First detected hand
-     */
-
     const landmarks =
         results.landmarks[0];
 
@@ -879,11 +873,6 @@ function isFingerUp(
     pip
 ) {
 
-    /*
-     * Camera image Y:
-     * smaller Y = higher on screen
-     */
-
     return (
         landmarks[tip].y <
         landmarks[pip].y
@@ -898,22 +887,6 @@ function isFingerUp(
 function detectGesture(
     landmarks
 ) {
-
-    /*
-     * Landmark indexes:
-     *
-     * Index:
-     * tip 8 / pip 6
-     *
-     * Middle:
-     * tip 12 / pip 10
-     *
-     * Ring:
-     * tip 16 / pip 14
-     *
-     * Pinky:
-     * tip 20 / pip 18
-     */
 
     const index =
         isFingerUp(
@@ -1034,11 +1007,6 @@ function performGesture(
     const now =
         Date.now();
 
-    /*
-     * Prevent the same gesture
-     * from firing continuously.
-     */
-
     if (
         gesture === lastGesture &&
         now - lastGestureTime <
@@ -1073,7 +1041,6 @@ function performGesture(
         window.scrollBy(
             {
                 top: -350,
-
                 behavior: "smooth"
             }
         );
@@ -1099,7 +1066,6 @@ function performGesture(
         window.scrollBy(
             {
                 top: 350,
-
                 behavior: "smooth"
             }
         );

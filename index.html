@@ -1,235 +1,217 @@
-```html
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>NLP-OS</title>
+```
+<title>NLP-OS</title>
 
-    <link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="/static/style.css">
 
-    <style>
-        #camera {
-            width: 100%;
-            max-width: 520px;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            border-radius: 14px;
-            background: #111;
-            display: block;
-            margin: 12px 0;
-        }
+<style>
+    #camera {
+        width: 100%;
+        max-width: 520px;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        border-radius: 14px;
+        background: #111;
+        display: block;
+        margin: 12px 0;
+    }
 
-        #cameraStatus {
-            font-weight: 600;
-        }
+    #cameraStatus {
+        font-weight: 600;
+    }
 
-        .camera-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
+    .camera-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
 
-        .camera-buttons button {
-            cursor: pointer;
-        }
-    </style>
+    .camera-buttons button {
+        cursor: pointer;
+    }
+</style>
+```
+
 </head>
 
 <body>
 
 <main>
 
-    <!-- HEADER -->
-    <header>
-        <div>
-            <small>AI / NLP PROJECT</small>
-            <h1>NLP-OS</h1>
-            <p>Voice + Hand Gesture Computer Control</p>
-        </div>
+```
+<header>
+    <div>
+        <small>AI / NLP PROJECT</small>
+        <h1>NLP-OS</h1>
+        <p>Voice + Hand Gesture Computer Control</p>
+    </div>
 
-        <div>
-            <span id="voice">🎤 VOICE READY</span>
-            &nbsp;
-            <span id="cam">✋ CAMERA STARTING</span>
-        </div>
-    </header>
+    <div>
+        <span id="voice">🎤 VOICE READY</span>
+        &nbsp;
+        <span id="cam">✋ CAMERA STARTING</span>
+    </div>
+</header>
 
+<section class="hero">
+    <h2>Control your computer with voice and hand simultaneously.</h2>
 
-    <!-- HERO -->
-    <section class="hero">
-        <h2>Control your computer with voice and hand simultaneously.</h2>
+    <p>
+        Say <b>“Open YouTube”</b>, then use hand gestures for
+        volume and scrolling while voice remains available.
+    </p>
+</section>
 
-        <p>
-            Say <b>“Open YouTube”</b>, then use hand gestures for
-            volume and scrolling while voice remains available.
-        </p>
-    </section>
+<section class="box">
 
+    <h3>🎤 Voice / Text Command</h3>
 
-    <!-- VOICE / TEXT COMMAND -->
-    <section class="box">
+    <input
+        id="cmd"
+        placeholder="Try: open YouTube"
+    >
 
-        <h3>🎤 Voice / Text Command</h3>
+    <button onclick="send()">Execute</button>
 
-        <input
-            id="cmd"
-            placeholder="Try: open YouTube"
-        >
+    <button id="voiceBtn">
+        🎤 Start Voice
+    </button>
 
-        <button onclick="send()">Execute</button>
+    <div class="examples">
 
-        <button id="voiceBtn">
-            🎤 Start Voice
+        <button onclick="quick('Open YouTube')">
+            Open YouTube
         </button>
 
-        <div class="examples">
+        <button onclick="quick('Open Calculator')">
+            Open Calculator
+        </button>
 
-            <button onclick="quick('Open YouTube')">
-                Open YouTube
-            </button>
+        <button onclick="quick('Search for Python NLP')">
+            Search
+        </button>
 
-            <button onclick="quick('Open Calculator')">
-                Open Calculator
-            </button>
-
-            <button onclick="quick('Search for Python NLP')">
-                Search
-            </button>
-
-            <button onclick="quick('Volume Up')">
-                Volume Up
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- INFORMATION GRID -->
-    <div class="grid">
-
-
-        <!-- NLP ANALYZER -->
-        <section class="box">
-
-            <h3>🧠 NLP Analyzer</h3>
-
-            <p>
-                Intent:
-                <b id="intent">—</b>
-            </p>
-
-            <p>
-                Confidence:
-                <b id="conf">—</b>
-            </p>
-
-            <p>
-                Entities:
-                <b id="entities">—</b>
-            </p>
-
-            <p>
-                Action:
-                <b id="action">—</b>
-            </p>
-
-        </section>
-
-
-        <!-- SYSTEM RESULT -->
-        <section class="box">
-
-            <h3>💻 System Result</h3>
-
-            <div id="result">
-                Waiting...
-            </div>
-
-        </section>
-
-
-        <!-- LIVE GESTURE + CAMERA -->
-        <section class="box">
-
-            <h3>✋ Live Gesture</h3>
-
-            <video
-                id="camera"
-                autoplay
-                playsinline
-                muted
-            ></video>
-
-            <p id="cameraStatus">
-                📷 Starting camera...
-            </p>
-
-            <div class="camera-buttons">
-
-                <button onclick="startCamera()">
-                    📷 Start Camera
-                </button>
-
-                <button onclick="stopCamera()">
-                    ⛔ Stop Camera
-                </button>
-
-            </div>
-
-            <p>
-                Gesture:
-                <b id="gesture">Waiting...</b>
-            </p>
-
-            <p>
-                Action:
-                <b id="gaction">—</b>
-            </p>
-
-        </section>
-
-
-        <!-- CONTROLS -->
-        <section class="box">
-
-            <h3>🎮 Controls</h3>
-
-            <p>🖐️ Open Palm → Volume +</p>
-
-            <p>✊ Fist → Mute</p>
-
-            <p>✌️ Two Fingers → Scroll Up</p>
-
-            <p>☝️ Index → Scroll Down</p>
-
-            <p>🤟 Three Fingers → Volume −</p>
-
-        </section>
+        <button onclick="quick('Volume Up')">
+            Volume Up
+        </button>
 
     </div>
 
+</section>
 
-    <!-- FOOTER -->
-    <footer>
-        NLP-OS • Simultaneous Multimodal Computer Control
-    </footer>
+<div class="grid">
+
+    <section class="box">
+
+        <h3>🧠 NLP Analyzer</h3>
+
+        <p>
+            Intent:
+            <b id="intent">—</b>
+        </p>
+
+        <p>
+            Confidence:
+            <b id="conf">—</b>
+        </p>
+
+        <p>
+            Entities:
+            <b id="entities">—</b>
+        </p>
+
+        <p>
+            Action:
+            <b id="action">—</b>
+        </p>
+
+    </section>
+
+    <section class="box">
+
+        <h3>💻 System Result</h3>
+
+        <div id="result">
+            Waiting...
+        </div>
+
+    </section>
+
+    <section class="box">
+
+        <h3>✋ Live Gesture</h3>
+
+        <video
+            id="camera"
+            autoplay
+            playsinline
+            muted
+        ></video>
+
+        <p id="cameraStatus">
+            📷 Starting camera...
+        </p>
+
+        <div class="camera-buttons">
+
+            <button onclick="startCamera()">
+                📷 Start Camera
+            </button>
+
+            <button onclick="stopCamera()">
+                ⛔ Stop Camera
+            </button>
+
+        </div>
+
+        <p>
+            Gesture:
+            <b id="gesture">Waiting...</b>
+        </p>
+
+        <p>
+            Action:
+            <b id="gaction">—</b>
+        </p>
+
+    </section>
+
+    <section class="box">
+
+        <h3>🎮 Controls</h3>
+
+        <p>🖐️ Open Palm → Volume +</p>
+
+        <p>✊ Fist → Mute</p>
+
+        <p>✌️ Two Fingers → Scroll Up</p>
+
+        <p>☝️ Index → Scroll Down</p>
+
+        <p>🤟 Three Fingers → Volume −</p>
+
+    </section>
+
+</div>
+
+<footer>
+    NLP-OS • Simultaneous Multimodal Computer Control
+</footer>
+```
 
 </main>
 
-
-<!-- BROWSER CAMERA SCRIPT -->
 <script>
 
 let cameraStream = null;
 
-
-/*
-    START CAMERA
-*/
 async function startCamera() {
 
     const video = document.getElementById("camera");
@@ -238,8 +220,10 @@ async function startCamera() {
 
     try {
 
-        if (!navigator.mediaDevices ||
-            !navigator.mediaDevices.getUserMedia) {
+        if (
+            !navigator.mediaDevices ||
+            !navigator.mediaDevices.getUserMedia
+        ) {
 
             status.textContent =
                 "❌ Browser does not support camera access.";
@@ -250,8 +234,6 @@ async function startCamera() {
             return;
         }
 
-
-        // If camera is already running
         if (cameraStream) {
 
             status.textContent =
@@ -263,10 +245,8 @@ async function startCamera() {
             return;
         }
 
-
         status.textContent =
             "📷 Requesting camera permission...";
-
 
         cameraStream =
             await navigator.mediaDevices.getUserMedia({
@@ -284,15 +264,11 @@ async function startCamera() {
                 },
 
                 audio: false
-
             });
-
 
         video.srcObject = cameraStream;
 
-
         await video.play();
-
 
         status.textContent =
             "🟢 Camera ON";
@@ -300,58 +276,38 @@ async function startCamera() {
         camIndicator.textContent =
             "✋ CAMERA ON";
 
-
     } catch (error) {
 
-        console.error(
-            "Camera error:",
-            error
-        );
-
+        console.error("Camera error:", error);
 
         cameraStream = null;
-
 
         if (error.name === "NotAllowedError") {
 
             status.textContent =
                 "🔴 Camera permission denied. Click Start Camera and Allow.";
 
-        }
-
-        else if (error.name === "NotFoundError") {
+        } else if (error.name === "NotFoundError") {
 
             status.textContent =
                 "🔴 No camera found.";
 
-        }
-
-        else if (error.name === "NotReadableError") {
+        } else if (error.name === "NotReadableError") {
 
             status.textContent =
                 "🔴 Camera is being used by another application.";
 
-        }
-
-        else {
+        } else {
 
             status.textContent =
                 "🔴 Camera error: " + error.message;
-
         }
-
 
         camIndicator.textContent =
             "✋ CAMERA OFF";
-
     }
-
 }
 
-
-/*
-    STOP CAMERA
-*/
 function stopCamera() {
 
     const video =
@@ -363,7 +319,6 @@ function stopCamera() {
     const camIndicator =
         document.getElementById("cam");
 
-
     if (cameraStream) {
 
         cameraStream
@@ -373,39 +328,25 @@ function stopCamera() {
         cameraStream = null;
     }
 
-
     video.srcObject = null;
-
 
     status.textContent =
         "⚪ Camera stopped";
 
     camIndicator.textContent =
         "✋ CAMERA OFF";
-
 }
 
-
-/*
-    AUTOMATICALLY START CAMERA
-    WHEN PAGE LOADS
-*/
 window.addEventListener(
     "load",
     function () {
-
         startCamera();
-
     }
 );
 
 </script>
 
-
-<!-- EXISTING NLP / VOICE JAVASCRIPT -->
 <script src="/static/app.js"></script>
-
 
 </body>
 </html>
-```

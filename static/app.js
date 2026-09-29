@@ -1,3 +1,51 @@
+let handLandmarker = null;
+let lastVideoTime = -1;
+
+async function initHandLandmarker() {
+
+    console.log("Loading MediaPipe...");
+
+    const vision = await import(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/+esm"
+    );
+
+    const {
+        FilesetResolver,
+        HandLandmarker
+    } = vision;
+
+    const filesetResolver =
+        await FilesetResolver.forVisionTasks(
+            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/wasm"
+        );
+
+    handLandmarker =
+        await HandLandmarker.createFromOptions(
+            filesetResolver,
+            {
+                baseOptions: {
+                    modelAssetPath: "/hand_landmarker.task",
+                    delegate: "GPU"
+                },
+
+                runningMode: "VIDEO",
+
+                numHands: 1,
+
+                minHandDetectionConfidence: 0.5,
+
+                minHandPresenceConfidence: 0.5,
+
+                minTrackingConfidence: 0.5
+            }
+        );
+
+    console.log(
+        "Hand Landmarker initialized successfully"
+    );
+}
+
+
 async function startCamera() {
 
     const video = document.getElementById("camera");
@@ -6,14 +54,18 @@ async function startCamera() {
 
     try {
 
-        if (!navigator.mediaDevices ||
-            !navigator.mediaDevices.getUserMedia) {
-
-            throw new Error("Camera API is not supported");
+        if (
+            !navigator.mediaDevices ||
+            !navigator.mediaDevices.getUserMedia
+        ) {
+            throw new Error(
+                "Camera API is not supported"
+            );
         }
 
         if (status) {
-            status.textContent = "📷 Starting camera...";
+            status.textContent =
+                "📷 Starting camera...";
         }
 
         const stream =
@@ -32,31 +84,39 @@ async function startCamera() {
         }
 
         if (cam) {
-            cam.textContent = "✋ CAMERA ON";
+            cam.textContent =
+                "✋ CAMERA ON";
         }
 
         if (status) {
-            status.textContent = "📷 Camera ON";
+            status.textContent =
+                "📷 Camera ON";
         }
 
-        console.log("Camera started successfully");
+        console.log(
+            "Camera started successfully"
+        );
 
-        // Start hand detection
         await initHandLandmarker();
 
         detectHands();
 
     } catch (error) {
 
-        console.error("Camera error:", error);
+        console.error(
+            "Camera error:",
+            error
+        );
 
         if (status) {
             status.textContent =
-                "❌ Camera Error: " + error.message;
+                "❌ Camera Error: " +
+                error.message;
         }
 
         if (cam) {
-            cam.textContent = "✋ CAMERA OFF";
+            cam.textContent =
+                "✋ CAMERA OFF";
         }
     }
 }

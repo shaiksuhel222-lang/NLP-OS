@@ -12,14 +12,9 @@ async function performGesture(gesture) {
     lastGesture = gesture;
     lastGestureTime = now;
 
-    const action =
-        document.getElementById("gaction");
+    const action = document.getElementById("gaction");
 
     let command = null;
-
-    /* ==============================
-       SCROLL
-       ============================== */
 
     if (gesture === "TWO FINGERS") {
 
@@ -48,10 +43,6 @@ async function performGesture(gesture) {
 
         return;
     }
-
-    /* ==============================
-       WINDOWS CONTROL
-       ============================== */
 
     if (gesture === "OPEN PALM") {
 
@@ -84,10 +75,6 @@ async function performGesture(gesture) {
         return;
     }
 
-    /* ==============================
-       SEND TO LOCAL WINDOWS AGENT
-       ============================== */
-
     try {
 
         const response = await fetch(
@@ -116,8 +103,7 @@ async function performGesture(gesture) {
         if (data.ok) {
 
             if (action) {
-                action.textContent =
-                    "✅ " + command;
+                action.textContent = "✅ " + command;
             }
 
         } else {

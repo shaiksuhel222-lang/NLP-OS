@@ -92,75 +92,75 @@ async function send() {
     const command =
         text.toLowerCase();
 
+/* -----------------------------------------------------
+   OPEN YOUTUBE DIRECTLY IN VISITOR'S BROWSER
+   ----------------------------------------------------- */
 
-    /* -----------------------------------------------------
-       OPEN YOUTUBE DIRECTLY IN VISITOR'S BROWSER
-       ----------------------------------------------------- */
+if (
+    command.includes("open youtube") ||
+    command === "youtube"
+) {
 
-    if (
-        command.includes("open youtube") ||
-        command === "youtube"
-    ) {
+    const youtubeWindow =
+        window.open(
+            "https://www.youtube.com",
+            "NLPOS_YOUTUBE",
+            "width=1200,height=800"
+        );
 
-        const youtubeWindow =
-            window.open(
-                "https://www.youtube.com",
-                "_blank"
-            );
+    if (youtubeWindow) {
 
-        if (youtubeWindow) {
+        window.focus();
 
-            if (result) {
-                result.textContent =
-                    "YouTube opened.";
-            }
-
-        } else {
-
-            if (result) {
-                result.textContent =
-                    "Browser blocked the new tab. Allow pop-ups for this site.";
-            }
+        if (result) {
+            result.textContent =
+                "YouTube opened. Keep NLP-OS window visible for hand gestures.";
         }
 
-        const intent =
-            document.getElementById("intent");
+    } else {
 
-        const conf =
-            document.getElementById("conf");
-
-        const entities =
-            document.getElementById("entities");
-
-        const action =
-            document.getElementById("action");
-
-        if (intent) {
-            intent.textContent =
-                "OPEN_WEBSITE";
+        if (result) {
+            result.textContent =
+                "Browser blocked the new window. Allow pop-ups for this site.";
         }
-
-        if (conf) {
-            conf.textContent =
-                "100%";
-        }
-
-        if (entities) {
-            entities.textContent =
-                JSON.stringify({
-                    website: "youtube"
-                });
-        }
-
-        if (action) {
-            action.textContent =
-                "Open YouTube";
-        }
-
-        return;
     }
 
+    const intent =
+        document.getElementById("intent");
 
+    const conf =
+        document.getElementById("conf");
+
+    const entities =
+        document.getElementById("entities");
+
+    const action =
+        document.getElementById("action");
+
+    if (intent) {
+        intent.textContent =
+            "OPEN_WEBSITE";
+    }
+
+    if (conf) {
+        conf.textContent =
+            "100%";
+    }
+
+    if (entities) {
+        entities.textContent =
+            JSON.stringify({
+                website: "youtube"
+            });
+    }
+
+    if (action) {
+        action.textContent =
+            "Open YouTube";
+    }
+
+    return;
+}
     /* -----------------------------------------------------
        TRY LOCAL WINDOWS AGENT
        ----------------------------------------------------- */
